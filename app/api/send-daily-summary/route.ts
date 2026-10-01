@@ -64,7 +64,7 @@ export async function POST(req: Request) {
               backgroundColor: '#a5293c',
               contents: [
                 { type: 'text', text: '🏥 สรุปตรวจความเรียบร้อย', color: '#FFFFFF', weight: 'bold', size: 'md' },
-                { type: 'text', text: `สาขาราชบุรี — 🗓️ วันที่ ${date}`, color: '#FFFFFF', size: 'xs', margin: 'xs' }
+                { type: 'text', text: `V Smile สาขาหัวหิน — 🗓️ วันที่ ${date}`, color: '#FFFFFF', size: 'xs', margin: 'xs' }
               ]
             },
             body: {

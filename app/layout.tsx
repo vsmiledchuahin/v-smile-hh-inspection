@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ฟอร์มตรวจความเรียบร้อย Red Smile สาขาราชบุรี",
+  title: "ฟอร์มตรวจความเรียบร้อย V Smile สาขาหัวหิน",
   description: "Developed by @mudmukapisara",
 };
 

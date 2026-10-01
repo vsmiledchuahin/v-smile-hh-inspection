@@ -82,7 +82,7 @@ export default function TasksPage() {
     <div className="min-h-screen bg-[#f6f3f2] pb-16">
       <header className="bg-gradient-to-br from-[#a5293c] to-[#7f1f2f] text-white px-4 pt-4 pb-1">
         <h1 className="text-lg font-bold">✅ งานที่ต้องแก้ไข</h1>
-        <p className="text-xs opacity-90 mb-2">คลินิกทันตกรรมเรดสไมล์ สาขาราชบุรี</p>
+        <p className="text-xs opacity-90 mb-2">คลินิกทันตกรรมวีสไมล์ สาขาหัวหิน</p>
         <Nav />
       </header>
 

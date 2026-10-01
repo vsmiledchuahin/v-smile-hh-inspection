@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabaseClient'
 import { SECTIONS } from '@/lib/sections'
 import Nav from '@/components/Nav'
 
-const CLINIC_NAME = 'คลินิกทันตกรรมเรดสไมล์ สาขาราชบุรี'
+const CLINIC_NAME = 'คลินิกทันตกรรมวีสไมล์ สาขาหัวหิน'
 
 type ItemState = { status: '' | 'เรียบร้อย' | 'ไม่เรียบร้อย'; note: string; fixer: string }
 
@@ -70,6 +70,11 @@ export default function FormPage() {
     SECTIONS.forEach((s) => {
       const state = (sectionState as any)[s.key]
       const items = state.items.map((it: ItemState, idx: number) => {
+        const itemDef = s.items[idx]
+        const applicable = !itemDef.periods || itemDef.periods.includes(period)
+        if (!applicable) {
+          return { label: itemDef.text, status: 'ไม่เกี่ยวข้อง', note: '', fixer: '', resolved: null, resolvedAt: null }
+        }
         totalItems++
         
         // นับเฉพาะรายการที่มีการกดเลือกสถานะจริง (เรียบร้อย หรือ ไม่เรียบร้อย)
@@ -79,7 +84,8 @@ export default function FormPage() {
         }
 
         return {
-          label: s.items[idx],
+          label: itemDef.text,
+          //label: s.items[idx],
           status: it.status,
           note: it.note,
           fixer: it.fixer,
@@ -204,19 +210,21 @@ export default function FormPage() {
               </div>
             )}
 
-            {s.items.map((label, idx) => {
-              const item = (sectionState as any)[s.key].items[idx] as ItemState
+            {s.items.map((item, idx) => {
+              const applicable = !item.periods || item.periods.includes(period)
+              if (!applicable) return null
+              const stateItem = (sectionState as any)[s.key].items[idx] as ItemState
               return (
                 <div key={idx} className="border border-[#e7dedc] rounded-xl p-3 mb-2 bg-[#f6f3f2]">
                   <p className="text-xs mb-2">
-                    {idx + 1}. {label}
+                    {idx + 1}. {item.text}
                   </p>
                   <div className="flex gap-2 mb-2">
                     <button
                       type="button"
                       onClick={() => updateItem(s.key, idx, { status: 'เรียบร้อย' })}
                       className={`flex-1 rounded-lg border py-2 text-xs font-semibold ${
-                        item.status === 'เรียบร้อย'
+                        stateItem.status === 'เรียบร้อย'
                           ? 'bg-green-50 border-green-600 text-green-700'
                           : 'bg-white border-[#e7dedc]'
                       }`}
@@ -227,7 +235,7 @@ export default function FormPage() {
                       type="button"
                       onClick={() => updateItem(s.key, idx, { status: 'ไม่เรียบร้อย' })}
                       className={`flex-1 rounded-lg border py-2 text-xs font-semibold ${
-                        item.status === 'ไม่เรียบร้อย'
+                        stateItem.status === 'ไม่เรียบร้อย'
                           ? 'bg-red-50 border-red-600 text-red-700'
                           : 'bg-white border-[#e7dedc]'
                       }`}
@@ -235,16 +243,16 @@ export default function FormPage() {
                       ✕ ไม่เรียบร้อย
                     </button>
                   </div>
-                  {item.status === 'ไม่เรียบร้อย' && (
+                  {stateItem.status === 'ไม่เรียบร้อย' && (
                     <div className="grid gap-2">
                       <textarea
                         placeholder="หมายเหตุ / สิ่งที่ขาด / ปัญหาที่พบ"
-                        value={item.note}
+                        value={stateItem.note}
                         onChange={(e) => updateItem(s.key, idx, { note: e.target.value })}
                         className="border border-[#e7dedc] rounded-lg px-3 py-2 text-xs"
                       />
                       <select
-                        value={item.fixer}
+                        value={stateItem.fixer}
                         onChange={(e) => updateItem(s.key, idx, { fixer: e.target.value })}
                         className="border border-[#e7dedc] rounded-lg px-3 py-2 text-xs"
                       >
