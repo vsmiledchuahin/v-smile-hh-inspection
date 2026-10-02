@@ -116,7 +116,7 @@ export async function POST(req: Request) {
                   action: {
                     type: 'uri',
                     label: '🔍 ดูรายละเอียดบนเว็บ',
-                    uri: 'https://red-smile-inspection.vercel.app/dashboard'
+                    uri: 'https://v-smile-hh-inspection.vercel.app/dashboard'
                   },
                   style: 'primary',
                   color: '#a5293c',

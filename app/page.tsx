@@ -226,7 +226,7 @@ export default function FormPage() {
                   <div className="flex gap-2 mb-2">
                     <button
                       type="button"
-                      onClick={() => updateItem(s.key, idx, { status: 'เรียบร้อย' })}
+                      onClick={() => updateItem(s.key, idx, { status: stateItem.status === 'เรียบร้อย' ? '': 'เรียบร้อย', })}
                       className={`flex-1 rounded-lg border py-2 text-xs font-semibold ${
                         stateItem.status === 'เรียบร้อย'
                           ? 'bg-green-50 border-green-600 text-green-700'
@@ -237,7 +237,7 @@ export default function FormPage() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => updateItem(s.key, idx, { status: 'ไม่เรียบร้อย' })}
+                      onClick={() => updateItem(s.key, idx, { status: stateItem.status === 'ไม่เรียบร้อย' ? '' : 'ไม่เรียบร้อย',})}
                       className={`flex-1 rounded-lg border py-2 text-xs font-semibold ${
                         stateItem.status === 'ไม่เรียบร้อย'
                           ? 'bg-red-50 border-red-600 text-red-700'
@@ -277,7 +277,20 @@ export default function FormPage() {
           
         ))}
 
-        {message && <p className="text-center text-sm mb-3">{message}</p>}
+        {message && (
+          <div
+            className={`p-4 mb-4 rounded-xl text-center text-sm font-semibold flex items-denter justify-center gap-2 transition-all ${
+              message.includes('บันทึกสำเร็จ')
+                ?'ng-emerald-100 border border-emerald-300 text-emerald-800 shadow-sm'
+                : 'bg-rose-100 border border-rose-300 text-rose-800 shadow-sm'
+            }`}
+            >
+              <span className="text-base">
+                {message.includes('บันทึกสำเร็จ') ? '✅' : '⚠️'}
+              </span>
+              <span>{message}</span>
+            </div>
+            )}
 
         <button
           type="submit"
