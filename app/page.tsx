@@ -31,6 +31,7 @@ export default function FormPage() {
   const [sectionState, setSectionState] = useState(freshSectionState)
 
   useEffect(() => {
+      //setSectionState(freshSectionState())
     supabase
       .from('staff')
       .select('name')
@@ -210,14 +211,17 @@ export default function FormPage() {
               </div>
             )}
 
-            {s.items.map((item, idx) => {
+            {(() => {
+              let displayIndex = 0
+              return s.items.map((item, idx) => {
               const applicable = !item.periods || item.periods.includes(period)
               if (!applicable) return null
+              displayIndex++
               const stateItem = (sectionState as any)[s.key].items[idx] as ItemState
               return (
                 <div key={idx} className="border border-[#e7dedc] rounded-xl p-3 mb-2 bg-[#f6f3f2]">
                   <p className="text-xs mb-2">
-                    {idx + 1}. {item.text}
+                    {displayIndex}. {item.text}
                   </p>
                   <div className="flex gap-2 mb-2">
                     <button
@@ -267,8 +271,10 @@ export default function FormPage() {
                   )}
                 </div>
               )
-            })}
+            })
+          })()}
           </div>
+          
         ))}
 
         {message && <p className="text-center text-sm mb-3">{message}</p>}
