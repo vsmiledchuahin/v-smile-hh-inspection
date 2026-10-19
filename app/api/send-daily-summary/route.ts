@@ -129,8 +129,53 @@ export async function POST(req: Request) {
       ]
     }
 
+    // 3. เตรียมข้อมูลส่งเข้า Discord
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL
+    if (!webhookUrl) {
+      return NextResponse.json({ success: false, error: 'Discord Webhook URL not configured' }, { status: 500 })
+    }
+
+    // แปลงรายการค้างแก้ไขเป็นข้อความสำหรับ Discord
+    let issueText = '✨ ไม่มีรายการค้างแก้ไข เรียบร้อยดีมาก!'
+    if (pendingIssues && pendingIssues.length > 0) {
+      issueText = pendingIssues
+        .map((item: any) => {
+          const noteText = item.note && item.note.trim() !== '' ? item.note : item.label
+          return `• **${noteText}**\n  └ 👤 รอแก้ไขโดย: ${item.fixer || 'ยังไม่ระบุ'}`
+        })
+        .join('\n')
+    }
+
+    const mText = morningScore !== null && morningScore !== undefined ? `\`${morningScore}%\`` : '`ยังไม่ตรวจ`'
+    const eText = eveningScore !== null && eveningScore !== undefined ? `\`${eveningScore}%\`` : '`ยังไม่ตรวจ`'
+
+    const embed = {
+      title: `🏥 สรุปตรวจความเรียบร้อยประจำวัน`,
+      description: `**VSmile หัวหิน** — 🗓️ วันที่ ${date}`,
+      color: 0xF5C827,
+      fields: [
+        { name: '☀️ รอบเช้า', value: `**${mText}**`, inline: true },
+        { name: '🌙 รอบเย็น', value: `**${eText}**`, inline: true },
+        { name: '\u200b', value: '----------------------------------------', inline: false },
+        { name: '⚠️ รายการค้างแก้ไข ณ วันนี้', value: issueText, inline: false },
+        { name: '\u200b', value: '🔗 [คลิกที่นี่เพื่อดูรายละเอียดบนเว็บ](https://v-smile-hh-inspection.vercel.app/dashboard)', inline: false }
+      ],
+      timestamp: new Date().toISOString(),
+    }
+
+    // 🟢 ยิงเข้า Discord Webhook (ไม่มีลิมิต ฟรี 100%)
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ embeds: [embed] }),
+    })
+
+    if (!response.ok) {
+      throw new Error('Discord API Error')
+    }
+
     // 3. ยิงข้อความเข้า LINE API
-    const response = await fetch('https://api.line.me/v2/bot/message/push', {
+    /*const response = await fetch('https://api.line.me/v2/bot/message/push', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -141,7 +186,7 @@ export async function POST(req: Request) {
 
     if (!response.ok) {
       throw new Error('LINE API Error')
-    }
+    }*/
 
     return NextResponse.json({ success: true })
   } catch (err: any) {
