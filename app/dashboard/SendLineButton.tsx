@@ -77,12 +77,15 @@ export default function SendLineButton({ rows, filteredIssues }: SendLineButtonP
       })
 
       if (res.ok) {
-        alert('📲 ส่งสรุปประจำวันเข้า LINE เรียบร้อยแล้ว!')
+        /*alert('📲 ส่งสรุปประจำวันเข้า LINE เรียบร้อยแล้ว!')*/
+        alert('📲 ส่งสรุปประจำวันเข้า DISCORD เรียบร้อยแล้ว!')
       } else {
-        alert('❌ เกิดข้อผิดพลาดในการส่ง LINE')
+        /*alert('❌ เกิดข้อผิดพลาดในการส่ง LINE')*/
+        alert('❌ เกิดข้อผิดพลาดในการส่ง DISCORD')
       }
     } catch {
-      alert('❌ ไม่สามารถส่ง LINE ได้')
+      /*alert('❌ ไม่สามารถส่ง LINE ได้')*/
+      alert('❌ ไม่สามารถส่ง DISCORD ได้')
     } finally {
       setSendingLine(false)
     }
@@ -92,9 +95,9 @@ export default function SendLineButton({ rows, filteredIssues }: SendLineButtonP
     <button
       onClick={handleSendLineSummary}
       disabled={sendingLine}
-      className="inline-flex items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
+      className="inline-flex items-center justify-center rounded-md bg-purple-200 px-4 py-2 text-sm font-medium text-white hover:bg-purple-400 disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {sendingLine ? '⏳ กำลังส่งข้อมูล...' : '📲 ส่งสรุปประจำวันเข้า LINE'}
+      {sendingLine ? '⏳ กำลังส่งข้อมูล...' : '📲 ส่งสรุปประจำวันเข้า DISCORD'}
     </button>
   )
 }
